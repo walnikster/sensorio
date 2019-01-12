@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import com.uleos.sensorio.server.sensorvals.JpaResultHelper;
+import com.uleos.sensorio.server.JpaResultHelper;
 import com.uleos.sensorio.server.sensorvals.entity.SensorValue;
 import com.uleos.sensorio.server.sensorvals.entity.SensorValue_;
 

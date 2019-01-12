@@ -1,4 +1,4 @@
-package com.uleos.sensorio.server.sensorvals;
+package com.uleos.sensorio.server;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

@@ -1,4 +1,4 @@
-package com.uleos.sensorio.server.sensorvals;
+package com.uleos.sensorio.server;
 
 import java.util.List;
 

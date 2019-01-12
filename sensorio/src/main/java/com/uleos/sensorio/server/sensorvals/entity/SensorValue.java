@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.uleos.sensorio.server.sensorvals.AbstractNaturalKeyEntity;
+import com.uleos.sensorio.server.AbstractNaturalKeyEntity;
 
 @Entity
 @Table(name = "SENSOR_VALS")

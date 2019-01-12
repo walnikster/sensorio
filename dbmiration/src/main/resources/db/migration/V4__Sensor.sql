@@ -1,0 +1,1 @@
+create table sensor (id int8 not null, uuid varchar(255), sensorid varchar(255) not null, name varchar(255) not null, primary key (id), CONSTRAINT UC_SESNORID UNIQUE (sensorid), CONSTRAINT UC_NAME UNIQUE (name));
