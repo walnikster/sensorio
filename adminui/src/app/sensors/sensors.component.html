@@ -21,7 +21,7 @@
     />
     <div [hidden]="!form.controls.name.errors?.required" class="invalid-feedback">Name is required</div>
   </div>
-  <input type="submit" value="Create" [disabled]="!form.valid" class="btn btn-primary btn-block mb-2" />
+  <input type="submit" [value]="!isEditMode ? 'Create' : 'Save'" [disabled]="!form.valid" class="btn btn-primary btn-block mb-2" />
 </form>
 
 <ul *ngIf="(sensorsObservable | async) as sensors; else loading">
