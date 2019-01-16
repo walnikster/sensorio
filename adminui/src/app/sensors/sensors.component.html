@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="saveorupdate()">
+  <div class="form-group">
+    <label for="sensorId">Sensor Id</label>
+    <input
+      type="text"
+      class="form-control"
+      id="sensorId"
+      formControlName="sensorId"
+      [ngClass]="{ 'is-invalid': form.controls.sensorId.errors && form.controls.sensorId.touched }"
+    />
+    <div [hidden]="!form.controls.sensorId.errors?.required" class="invalid-feedback">Sensor Id is required</div>
+  </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="name"
+      id="name"
+      [ngClass]="{ 'is-invalid': form.controls.name.errors && form.controls.name.touched }"
+    />
+    <div [hidden]="!form.controls.name.errors?.required" class="invalid-feedback">Name is required</div>
+  </div>
+  <input type="submit" value="Create" [disabled]="!form.valid" class="btn btn-primary btn-block mb-2" />
+</form>
+
+<ul *ngIf="(sensorsObservable | async) as sensors; else loading">
+  <ng-container *ngIf="sensors.length; else noItems">
+    <li *ngFor="let sensor of sensors">
+      {{ sensor.id }}-{{ sensor.sensorId }}-{{ sensor.name }} <button (click)="delete(sensor.id)">delete {{ sensor.id }}</button>
+      <button (click)="forEdit(sensor)">edit {{ sensor.id }}</button>
+    </li>
+  </ng-container>
+  <ng-template #noItems>No sensors found!</ng-template>
+</ul>
+<ng-template #loading>loading sensors...</ng-template>
+<button (click)="reload()">Reload</button>

@@ -1,4 +1,4 @@
-package com.uleos.sensorio.server.boundary;
+package com.uleos.sensorio.server.sensor.boundary;
 
 import java.net.URI;
 import java.util.List;
@@ -10,8 +10,10 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,13 +33,23 @@ public class SensorResource {
 	private SensorService sensorService;
 
 	@POST
-	public Response addSensorValue(JsonObject json, @Context HttpServletRequest request) {
+	public Response addSensor(JsonObject json, @Context HttpServletRequest request) {
 		Sensor sensor = new Sensor();
 		sensor.setSensorId(json.getJsonString("sensorId").getString());
 		sensor.setName(json.getJsonString("name").getString());
-
 		sensor = sensorService.create(sensor);
 		return Response.created(URI.create("/" + sensor.getId())).build();
+	}
+
+	@PUT
+	@Path("{id}")
+	public Response update(@PathParam("id") Long id, JsonObject json, @Context HttpServletRequest request) {
+		Sensor sensor = new Sensor();
+		sensor.setSensorId(json.getJsonString("sensorId").getString());
+		sensor.setName(json.getJsonString("name").getString());
+		sensor.setId(id);
+		sensorService.merge(sensor);
+		return Response.ok().build();
 	}
 
 	@GET
@@ -53,5 +65,12 @@ public class SensorResource {
 	@Path("{id}")
 	public Sensor sensor(@PathParam("id") Long id) {
 		return sensorService.findById(id);
+	}
+
+	@DELETE
+	@Path("{id}")
+	public Response removeSensor(@PathParam("id") Long id) {
+		sensorService.remove(id);
+		return Response.ok().build();
 	}
 }

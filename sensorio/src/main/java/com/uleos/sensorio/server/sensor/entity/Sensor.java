@@ -5,10 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import com.uleos.sensorio.server.AbstractNaturalKeyEntity;
 
 @Entity
+@Table(name = "SENSOR")
+@SequenceGenerator(name = "seq", allocationSize = 10, sequenceName = "id_sequence")
 public class Sensor extends AbstractNaturalKeyEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

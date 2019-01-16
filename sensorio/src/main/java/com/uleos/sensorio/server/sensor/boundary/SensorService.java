@@ -1,7 +1,8 @@
-package com.uleos.sensorio.server.boundary;
+package com.uleos.sensorio.server.sensor.boundary;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,6 +14,7 @@ import com.uleos.sensorio.server.JpaResultHelper;
 import com.uleos.sensorio.server.sensor.entity.Sensor;
 import com.uleos.sensorio.server.sensor.entity.Sensor_;
 
+@Stateless
 public class SensorService {
 
 	@PersistenceContext(unitName = "pu")
@@ -42,6 +44,10 @@ public class SensorService {
 			sensor = entityManager.merge(sensor);
 		}
 		entityManager.remove(sensor);
+	}
+
+	public void remove(Long id) {
+		entityManager.remove(findById(id));
 	}
 
 	public Sensor findById(Long id) {
