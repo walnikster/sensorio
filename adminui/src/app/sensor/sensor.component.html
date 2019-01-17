@@ -3,4 +3,4 @@
 </ul>
 <ng-template #empty><h3>loading temp data</h3></ng-template>
 <div *ngIf="(sensordataObservable | async)?.length == 0">No data</div>
-<button (click)="reload()">Reload</button>
+<button (click)="reload()" class="btn btn-primary">Reload</button>

@@ -34,21 +34,18 @@ public class SensorResource {
 
 	@POST
 	public Response addSensor(JsonObject json, @Context HttpServletRequest request) {
-		Sensor sensor = new Sensor();
-		sensor.setSensorId(json.getJsonString("sensorId").getString());
-		sensor.setName(json.getJsonString("name").getString());
-		sensor = sensorService.create(sensor);
+		String sensorId = json.getJsonString("sensorId").getString();
+		String name = json.getJsonString("name").getString();
+		Sensor sensor = sensorService.create(sensorId, name);
 		return Response.created(URI.create("/" + sensor.getId())).build();
 	}
 
 	@PUT
 	@Path("{id}")
 	public Response update(@PathParam("id") Long id, JsonObject json, @Context HttpServletRequest request) {
-		Sensor sensor = new Sensor();
-		sensor.setSensorId(json.getJsonString("sensorId").getString());
-		sensor.setName(json.getJsonString("name").getString());
-		sensor.setId(id);
-		sensorService.merge(sensor);
+		String sensorId = json.getJsonString("sensorId").getString();
+		String name = json.getJsonString("name").getString();
+		sensorService.merge(id, sensorId, name);
 		return Response.ok().build();
 	}
 

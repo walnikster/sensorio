@@ -20,7 +20,10 @@ public class SensorService {
 	@PersistenceContext(unitName = "pu")
 	EntityManager entityManager;
 
-	public Sensor create(Sensor sensor) {
+	public Sensor create(String sensorId, String name) {
+		Sensor sensor = new Sensor();
+		sensor.setSensorId(sensorId);
+		sensor.setName(name);
 		entityManager.persist(sensor);
 		return sensor;
 	}
@@ -35,8 +38,11 @@ public class SensorService {
 		return q.getResultList();
 	}
 
-	public Sensor merge(Sensor sensor) {
-		return entityManager.merge(sensor);
+	public Sensor merge(Long id, String sensorId, String name) {
+		Sensor sensorInDB = entityManager.find(Sensor.class, id);
+		sensorInDB.setSensorId(sensorId);
+		sensorInDB.setName(name);
+		return entityManager.merge(sensorInDB);
 	}
 
 	public void remove(Sensor sensor) {
@@ -57,19 +63,6 @@ public class SensorService {
 		cq.select(root).where(cb.equal(root.get(Sensor_.id), id));
 		TypedQuery<Sensor> q = entityManager.createQuery(cq);
 		return JpaResultHelper.getSingleResultOrNull(q);
-	}
-
-	public void save(List<Sensor> sensors) {
-		for (Sensor sensor : sensors) {
-			if (sensor.getId() == null) {
-				entityManager.persist(sensor);
-			} else {
-				entityManager.merge(sensor);
-			}
-			if (sensor.isMarkedToDelete()) {
-				remove(sensor);
-			}
-		}
 	}
 
 	public Sensor getSensorBySensorId(String sensorId) {
