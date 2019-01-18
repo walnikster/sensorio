@@ -23,7 +23,8 @@ export class SensorsComponent implements OnInit {
   id: number
 
   ngOnInit() {
-    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors')
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
+    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors', { headers: headers })
     this.form = this.fb.group({
       sensorId: ['', Validators.required],
       name: ['', [Validators.required]]
@@ -32,7 +33,8 @@ export class SensorsComponent implements OnInit {
   }
 
   reload() {
-    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors')
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
+    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors', { headers: headers })
   }
 
   saveorupdate() {
@@ -47,12 +49,21 @@ export class SensorsComponent implements OnInit {
     if (!this.form.valid) {
       console.log('invalid form')
     } else {
-      this.httpClient.post<Sensor>('http://localhost:8080/sensorio/resources/sensors', this.form.value).subscribe(data => {
-        this.reload()
-        this.form.reset()
-        this.id = null
-        this.isEditMode = false
-      })
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
+      this.httpClient.post<Sensor>('http://localhost:8080/sensorio/resources/sensors', this.form.value, { headers: headers }).subscribe(
+        data => {
+          console.log('POST response received', data)
+        },
+        err => {
+          console.error('POST error received', err)
+        },
+        () => {
+          this.reload()
+          this.form.reset()
+          this.id = null
+          this.isEditMode = false
+        }
+      )
     }
   }
 
@@ -60,20 +71,37 @@ export class SensorsComponent implements OnInit {
     if (!this.form.valid) {
       console.log('invalid form')
     } else {
-      this.httpClient.put<Sensor>(`http://localhost:8080/sensorio/resources/sensors/${this.id}`, this.form.value).subscribe(data => {
-        this.reload()
-        this.form.reset()
-        this.id = null
-        this.isEditMode = false
-      })
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
+      this.httpClient.put<Sensor>(`http://localhost:8080/sensorio/resources/sensors/${this.id}`, this.form.value, { headers: headers }).subscribe(
+        data => {
+          console.log('PUT response received', data)
+        },
+        err => {
+          console.error('PUT error received', err)
+        },
+        () => {
+          this.reload()
+          this.form.reset()
+          this.id = null
+          this.isEditMode = false
+        }
+      )
     }
   }
 
   delete(id) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-    this.httpClient.delete(`http://localhost:8080/sensorio/resources/sensors/${id}`, { headers: headers }).subscribe(data => {
-      this.reload()
-    })
+    this.httpClient.delete(`http://localhost:8080/sensorio/resources/sensors/${id}`, { headers: headers }).subscribe(
+      data => {
+        console.log('DELETE response received', data)
+      },
+      err => {
+        console.error('DELETE error received', err)
+      },
+      () => {
+        this.reload()
+      }
+    )
   }
 
   forEdit(sensor: Sensor) {

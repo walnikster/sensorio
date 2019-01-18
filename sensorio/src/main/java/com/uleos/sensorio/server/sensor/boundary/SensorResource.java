@@ -20,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.uleos.sensorio.server.sensor.entity.Sensor;
 
@@ -33,11 +34,14 @@ public class SensorResource {
 	private SensorService sensorService;
 
 	@POST
-	public Response addSensor(JsonObject json, @Context HttpServletRequest request) {
+	public Response addSensor(JsonObject json, @Context HttpServletRequest request, @Context UriInfo uriInfo) {
 		String sensorId = json.getJsonString("sensorId").getString();
 		String name = json.getJsonString("name").getString();
 		Sensor sensor = sensorService.create(sensorId, name);
-		return Response.created(URI.create("/" + sensor.getId())).build();
+		URI uri = uriInfo.getRequestUri();
+		return Response.created(URI.create(uri + "/" + sensor.getId())).entity(Json.createObjectBuilder()
+				.add("id", sensor.getId()).add("sensorId", sensor.getSensorId()).add("name", sensor.getName()).build())
+				.build();
 	}
 
 	@PUT
@@ -68,6 +72,6 @@ public class SensorResource {
 	@Path("{id}")
 	public Response removeSensor(@PathParam("id") Long id) {
 		sensorService.remove(id);
-		return Response.ok().build();
+		return Response.noContent().build();
 	}
 }

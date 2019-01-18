@@ -47,6 +47,9 @@
     </tbody>
   </table>
   <ng-template #noItems>No sensors found!</ng-template>
-  <ng-template #loading>loading sensors...</ng-template>
+  <button (click)="reload()" class="btn btn-primary">Reload</button>
 </ng-container>
-<button (click)="reload()" class="btn btn-primary">Reload</button>
+<ng-template #loading
+  ><div>loading sensors...</div>
+  <button (click)="reload()" class="btn btn-primary" disabled="true">Reload</button>
+</ng-template>
