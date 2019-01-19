@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Component, OnInit } from '@angular/core'
 import { Observable } from 'rxjs'
-import { tap } from 'rxjs/operators'
 class SensorData {
   id: number
   temperature: number
@@ -16,12 +15,13 @@ export class SensorComponent implements OnInit {
   constructor(private httpClient: HttpClient) {}
 
   sensordataObservable: Observable<SensorData[]>
+  baseUrl = 'http://localhost:3000/temperatures'
 
   ngOnInit() {
-    this.sensordataObservable = this.httpClient.get<SensorData[]>('http://localhost:3000/temperatures')
+    this.reload()
   }
 
   reload() {
-    this.sensordataObservable = this.httpClient.get<SensorData[]>('http://localhost:3000/temperatures')
+    this.sensordataObservable = this.httpClient.get<SensorData[]>(`${this.baseUrl}`)
   }
 }

@@ -1,6 +1,24 @@
-<ul *ngIf="(sensordataObservable | async) as sensordata; else empty">
-  <li *ngFor="let temp of sensordata">{{ temp.id }}-{{ temp.temp }}-{{ temp.time }}</li>
-</ul>
-<ng-template #empty><h3>loading temp data</h3></ng-template>
-<div *ngIf="(sensordataObservable | async)?.length == 0">No data</div>
-<button (click)="reload()" class="btn btn-primary">Reload</button>
+<ng-container *ngIf="(sensordataObservable | async) as sensordata; else loading">
+  <table *ngIf="sensordata.length; else noItems" class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Temperature</th>
+        <th>Date/Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let temp of sensordata">
+        <td>{{ temp.id }}</td>
+        <td>{{ temp.temp }}</td>
+        <td>{{ temp.time }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noItems>No sensor data found!</ng-template>
+  <button (click)="reload()" class="btn btn-primary">Reload</button>
+</ng-container>
+<ng-template #loading
+  ><div>loading sensor data...</div>
+  <button (click)="reload()" class="btn btn-primary" disabled="true">Reload</button>
+</ng-template>

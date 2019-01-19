@@ -1,4 +1,3 @@
-import { tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Component, OnInit } from '@angular/core'
 import { Observable } from 'rxjs'
@@ -21,10 +20,11 @@ export class SensorsComponent implements OnInit {
   form: FormGroup
   isEditMode: boolean
   id: number
+  jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json;' })
+  baseUrl = 'http://localhost:8080/sensorio/resources/sensors'
 
   ngOnInit() {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors', { headers: headers })
+    this.reload()
     this.form = this.fb.group({
       sensorId: ['', Validators.required],
       name: ['', [Validators.required]]
@@ -33,8 +33,7 @@ export class SensorsComponent implements OnInit {
   }
 
   reload() {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-    this.sensorsObservable = this.httpClient.get<Sensor[]>('http://localhost:8080/sensorio/resources/sensors', { headers: headers })
+    this.sensorsObservable = this.httpClient.get<Sensor[]>(`${this.baseUrl}`, { headers: this.jsonHeaders })
   }
 
   saveorupdate() {
@@ -45,12 +44,11 @@ export class SensorsComponent implements OnInit {
     }
   }
 
-  create() {
+  private create() {
     if (!this.form.valid) {
       console.log('invalid form')
     } else {
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-      this.httpClient.post<Sensor>('http://localhost:8080/sensorio/resources/sensors', this.form.value, { headers: headers }).subscribe(
+      this.httpClient.post<Sensor>(`${this.baseUrl}`, this.form.value, { headers: this.jsonHeaders }).subscribe(
         data => {
           console.log('POST response received', data)
         },
@@ -67,12 +65,11 @@ export class SensorsComponent implements OnInit {
     }
   }
 
-  save() {
+  private save() {
     if (!this.form.valid) {
       console.log('invalid form')
     } else {
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-      this.httpClient.put<Sensor>(`http://localhost:8080/sensorio/resources/sensors/${this.id}`, this.form.value, { headers: headers }).subscribe(
+      this.httpClient.put<Sensor>(`${this.baseUrl}/${this.id}`, this.form.value, { headers: this.jsonHeaders }).subscribe(
         data => {
           console.log('PUT response received', data)
         },
@@ -90,8 +87,7 @@ export class SensorsComponent implements OnInit {
   }
 
   delete(id) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json;' })
-    this.httpClient.delete(`http://localhost:8080/sensorio/resources/sensors/${id}`, { headers: headers }).subscribe(
+    this.httpClient.delete(`${this.baseUrl}/${id}`, { headers: this.jsonHeaders }).subscribe(
       data => {
         console.log('DELETE response received', data)
       },
