@@ -1,3 +1,40 @@
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="time">Id</label>
+    <input
+      type="text"
+      class="form-control"
+      id="id"
+      formControlName="id"
+      [ngClass]="{ 'is-invalid': form.controls.id.errors && form.controls.id.touched }"
+    />
+    <div [hidden]="!form.controls.id.errors?.required" class="invalid-feedback">Id is required</div>
+  </div>
+  <div class="form-group">
+    <label for="time">Sensor time</label>
+    <input
+      type="text"
+      class="form-control"
+      id="time"
+      formControlName="time"
+      [ngClass]="{ 'is-invalid': form.controls.time.errors && form.controls.time.touched }"
+    />
+    <div [hidden]="!form.controls.time.errors?.required" class="invalid-feedback">Sensor time is required</div>
+  </div>
+  <div class="form-group">
+    <label for="temp">temp</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="temp"
+      id="temp"
+      [ngClass]="{ 'is-invalid': form.controls.temp.errors && form.controls.temp.touched }"
+    />
+    <div [hidden]="!form.controls.temp.errors?.required" class="invalid-feedback">temp is required</div>
+  </div>
+  <button (click)="saveorupdate()" [disabled]="!form.valid" class="btn btn-primary mb-2">{{ !isEditMode ? 'Create' : 'Save' }}</button>
+</form>
+
 <ng-container *ngIf="(sensordataObservable | async) as sensordata; else loading">
   <table *ngIf="sensordata.length; else noItems" class="table">
     <thead>
@@ -5,6 +42,7 @@
         <th>Id</th>
         <th>Temperature</th>
         <th>Date/Time</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -12,6 +50,7 @@
         <td>{{ temp.id }}</td>
         <td>{{ temp.temp }}</td>
         <td>{{ temp.time }}</td>
+        <td><button (click)="delete(temp.id)">Delete</button><button (click)="forEdit(temp)">Edit</button></td>
       </tr>
     </tbody>
   </table>
