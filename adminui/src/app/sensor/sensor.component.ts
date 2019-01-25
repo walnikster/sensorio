@@ -19,7 +19,7 @@ export class SensorComponent implements OnInit {
   form: FormGroup
   isEditMode: boolean
   id: number
-  jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json;' })
+  jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json' })
   baseUrl = 'http://localhost:3000/temperatures'
 
   ngOnInit() {
@@ -75,7 +75,11 @@ export class SensorComponent implements OnInit {
     if (!this.form.valid) {
       console.log('invalid form')
     } else {
-      this.httpClient.put<SensorData>(`${this.baseUrl}/${this.id}`, this.form.value, { headers: this.jsonHeaders }).subscribe(
+      let sensordata = new SensorData()
+      sensordata.id = this.id
+      sensordata.temp = this.form.get('temp').value
+      sensordata.time = this.form.get('time').value
+      this.httpClient.put<SensorData>(`${this.baseUrl}/${this.id}`, sensordata, { headers: this.jsonHeaders }).subscribe(
         data => {
           console.log('PUT response received', data)
         },
