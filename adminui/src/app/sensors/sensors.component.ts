@@ -20,7 +20,7 @@ export class SensorsComponent implements OnInit {
   form: FormGroup
   isEditMode: boolean
   id: number
-  jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json;' })
+  jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json' })
   baseUrl = 'http://localhost:8080/sensorio/resources/sensors'
 
   ngOnInit() {
