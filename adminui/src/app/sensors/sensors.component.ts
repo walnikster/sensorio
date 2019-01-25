@@ -24,16 +24,17 @@ export class SensorsComponent implements OnInit {
   baseUrl = 'http://localhost:8080/sensorio/resources/sensors'
 
   ngOnInit() {
-    this.reload()
     this.form = this.fb.group({
       sensorId: ['', Validators.required],
       name: ['', [Validators.required]]
     })
     this.isEditMode = false
+    this.reload()
   }
 
   reload() {
     this.sensorsObservable = this.httpClient.get<Sensor[]>(`${this.baseUrl}`, { headers: this.jsonHeaders })
+    this.resetToNew()
   }
 
   saveorupdate() {
@@ -57,9 +58,7 @@ export class SensorsComponent implements OnInit {
         },
         () => {
           this.reload()
-          this.form.reset()
-          this.id = null
-          this.isEditMode = false
+          this.resetToNew()
         }
       )
     }
@@ -78,12 +77,17 @@ export class SensorsComponent implements OnInit {
         },
         () => {
           this.reload()
-          this.form.reset()
-          this.id = null
-          this.isEditMode = false
+          this.resetToNew()
         }
       )
     }
+  }
+
+  private resetToNew() {
+    this.form.reset()
+    this.id = null
+    this.isEditMode = false
+    this.form.get('id').enable()
   }
 
   delete(id) {
@@ -96,6 +100,7 @@ export class SensorsComponent implements OnInit {
       },
       () => {
         this.reload()
+        this.resetToNew()
       }
     )
   }
